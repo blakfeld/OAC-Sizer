@@ -11,7 +11,7 @@ angular.module('app.routes', ['ui.router'])
   .config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
       .state('main', {
-        url: '/?requiredCPU&requiredMemory&requiredStorage',
+        url: '/',
         views: {
           main: {
             templateUrl: 'static/templates/main.tpl.html',
@@ -20,7 +20,7 @@ angular.module('app.routes', ['ui.router'])
         }
       })
       .state('requirements', {
-        url: '/requirements?requiredCPU&requiredMemory&requiredStorage',
+        url: '/requirements?requiredCpu&requiredMemory&requiredStorage',
         views: {
           main: {
             templateUrl: 'static/templates/requirements.tpl.html',
@@ -28,7 +28,7 @@ angular.module('app.routes', ['ui.router'])
           },
         }
       }).state('results', {
-        url: '/results?requiredCPU&requiredMemory&requiredStorage',
+        url: '/results?requiredCpu&requiredMemory&requiredStorage',
         views: {
           main: {
             templateUrl: 'static/templates/results.tpl.html',

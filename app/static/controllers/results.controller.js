@@ -16,4 +16,10 @@ angular.module('app.core')
     vm.cluster.requiredMemory = $stateParams.requiredMemory;
     vm.cluster.requiredStorage = $stateParams.requiredStorage;
 
+    console.log($stateParams);
+    console.log(vm.cluster.requiredCpu);
+    vm.cluster.getInstanceTypes().then(function () {
+      console.log(vm.cluster.instanceTypes);
+    });
+
   });

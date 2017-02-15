@@ -1,17 +1,16 @@
-<div class="section">
-  <div class="row">
+<ng-include src="'static/templates/center-spinner.tpl.html'"
+            ng-show="results.cluster.isLoading"></ng-include>
 
+<div class="section" ng-hide="results.cluster.isLoading">
+  <div class="fixed-action-btn">
+    <a class="btn-floating red lighten-1"
+       tooltipped
+       data-position="left"
+       data-delay="50"
+       data-tooltip="Create New Cluster">
+      <i class="material-icons">add</i>
+    </a>
   </div>
-</div>
-
-<div class="fixed-action-btn">
-  <a class="btn-floating red lighten-1"
-     tooltipped
-     data-position="left"
-     data-delay="50"
-     data-tooltip="Create New Cluster">
-    <i class="material-icons">add</i>
-  </a>
 </div>
 
 <div id="requirementsModal" class="modal">

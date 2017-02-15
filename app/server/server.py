@@ -19,6 +19,7 @@ app = bottle.Bottle()
 instance_data = None
 
 CACHE_MAX_AGE = os.environ.get('CACHE_MAX_AGE', defaults.CACHE_MAX_AGE)
+DEBUG_MODE = False
 INSTANCES_JSON_URL = os.environ.get('INSTANCES_JSON_URL',
                                     defaults.INSTANCES_JSON_URL)
 STATIC_PATH = os.environ.get('STATIC_PATH', defaults.STATIC_PATH)
@@ -31,7 +32,7 @@ STATIC_LIB_PATH = os.environ.get('STATIC_LIB_PATH', defaults.STATIC_LIB_PATH)
 
 
 @app.get('/')
-@no_cache()
+@no_cache(DEBUG_MODE)
 def get_index():
     """
     GET our index page.
@@ -74,7 +75,7 @@ def get_instance_types():
         dict
     """
     logging.debug('Serving instance type data.')
-    print('Request Max CPU {}'.format(request.query.max_cpu))
+    print('Request Max CPU {}'.format(bottle.request.query.max_cpu))
 
     return instance_data.get_instance_types(
         max_cpu=bottle.request.query.max_cpu,
@@ -104,6 +105,7 @@ def get_specific_instance_type(instance_type):
 
 
 @app.get('/static/<filename:path>')
+@no_cache(DEBUG_MODE)
 def get_static(filename):
     """
     Serve static files.
@@ -120,6 +122,7 @@ def get_static(filename):
 
 
 @app.get('/lib/<filename:path>')
+@no_cache(DEBUG_MODE)
 def get_lib(filename):
     """
     Server library files downloaded via "npm".o
@@ -135,17 +138,19 @@ def get_lib(filename):
     return bottle.static_file(filename, root=STATIC_LIB_PATH)
 
 
-def init_app(log_level):
+def init_app(debug, log_level):
     """
     Perform Initialization actions before starting the server.
 
     Args:
         log_level (str):        Logging level.
     """
-    global instance_data
+    global instance_data, DEBUG_MODE
 
     instance_data = AWSInstances(INSTANCES_JSON_URL, CACHE_MAX_AGE)
     logging.basicConfig(level=getattr(logging, log_level.upper()))
+
+    DEBUG_MODE = debug
 
     logging.debug('App initialized.')
 
@@ -168,7 +173,7 @@ def serve(host,
         server (str):       Bottle server to use.
         debug (bool):       Toggle Bottle debug mode.
     """
-    init_app(log_level)
+    init_app(debug, log_level)
 
     logging.debug('Running "%s" server.', server)
     bottle.debug(debug)
