@@ -27,7 +27,8 @@ angular.module('app.routes', ['ui.router'])
             controller: 'RequirementsController as require',
           },
         }
-      }).state('results', {
+      })
+      .state('results', {
         url: '/results?requiredCpu&requiredMemory&requiredStorage',
         views: {
           main: {

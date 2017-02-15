@@ -31,7 +31,18 @@ angular.module('app.core')
         });
 
         return defer.promise;
+      },
+      'getInstanceType': function(instanceType) {
+        var defer = $q.defer();
+        AWSInstanceService.get({instanceType: instanceType}, function(data) {
+          console.log(data)
+        });
+
+        defer.resolve;
+
+        return defer.promise;
       }
+
     };
 
     return computeCluster;

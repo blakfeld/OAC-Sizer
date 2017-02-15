@@ -6,8 +6,10 @@
     <div class="row">
       <div class="input-field">
         <input id="requiredCpu"
-               type="text"
-               ng-model="require.cluster.requiredCPU" />
+               type="number"
+               min="1"
+               ng-model="require.cluster.requiredCpu"
+               required />
         <label for="requiredCpu">Required CPU Cores</label>
       </div>
     </div>
@@ -15,8 +17,10 @@
     <div class="row">
       <div class="input-field">
         <input id="requiredMemory"
-               type="text"
-               ng-model="require.cluster.requiredMemory" />
+               type="number"
+               min="1"
+               ng-model="require.cluster.requiredMemory"
+               required />
         <label for="requiredMemory">Required Memory in GB</label>
       </div>
     </div>
@@ -24,8 +28,10 @@
     <div class="row">
       <div class="input-field">
         <input id="requiredStorage"
-               type="text"
-               ng-model="require.cluster.requiredStorage" />
+               type="number"
+               min="0"
+               ng-model="require.cluster.requiredStorage"
+               required />
         <label for="requiredStorage">Required Storage in GB</label>
       </div>
     </div>

@@ -18,6 +18,7 @@ from server.utils import no_cache
 app = bottle.Bottle()
 instance_data = None
 
+API_PREFIX = '/api/v1.0'
 CACHE_MAX_AGE = os.environ.get('CACHE_MAX_AGE', defaults.CACHE_MAX_AGE)
 DEBUG_MODE = False
 INSTANCES_JSON_URL = os.environ.get('INSTANCES_JSON_URL',
@@ -50,7 +51,7 @@ def get_index():
 ##
 
 
-@app.get('/api/v1.0/instances')
+@app.get(API_PREFIX + '/instances')
 def get_instances():
     """
     Get raw instance data.
@@ -66,7 +67,7 @@ def get_instances():
     return instance_data.get_instances()
 
 
-@app.get('/api/v1.0/instances/types')
+@app.get(API_PREFIX + '/instances/types')
 def get_instance_types():
     """
     Get a list of all instance types.
@@ -75,15 +76,15 @@ def get_instance_types():
         dict
     """
     logging.debug('Serving instance type data.')
-    print('Request Max CPU {}'.format(bottle.request.query.max_cpu))
+    print(bottle.request.query.requiredCpu)
 
     return instance_data.get_instance_types(
-        max_cpu=bottle.request.query.max_cpu,
-        max_memory=bottle.request.query.max_memory,
-        max_storage=bottle.request.query.max_storage)
+        max_cpu=bottle.request.query.requiredCpu,
+        max_memory=bottle.request.query.requiredMemory,
+        max_storage=bottle.request.query.requiredStorage)
 
 
-@app.get('/api/v1.0/instances/types/<instance_type>')
+@app.get(API_PREFIX + '/instances/types/<instance_type>')
 def get_specific_instance_type(instance_type):
     """
     Get all the data on a specific instance type.
@@ -97,6 +98,12 @@ def get_specific_instance_type(instance_type):
     logging.debug('Serving instance data for type "%s"', instance_type)
 
     return instance_data.get_instance_type(instance_type)
+
+
+@app.get(API_PREFIX + '/prices')
+def get_instance_prices():
+    """
+    """
 
 
 ##

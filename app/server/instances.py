@@ -25,6 +25,7 @@ Author: Corwin Brown <corwin@corwinbrown.com>
 """
 from __future__ import print_function, absolute_import
 
+import copy
 import logging
 from datetime import datetime, timedelta
 
@@ -50,12 +51,12 @@ class AWSInstances(object):
         self.cache_max_age = cache_max_age
 
         self._expire_time = None  # Track when our cached data expires.
-        self._raw = None
+        self._raw_data = None
 
         self._refresh_instances_json()
 
     @property
-    def raw(self):
+    def data(self):
         """
         Check if 'self.instances' is fresh enough, and then return
             the raw instance data.
@@ -65,7 +66,7 @@ class AWSInstances(object):
         """
         self._refresh_instances_json()
 
-        return self._raw
+        return self._raw_data
 
     def get_instances(self):
         """
@@ -74,31 +75,30 @@ class AWSInstances(object):
         Returns:
             dict
         """
-        return self._json_wrapping(instances=self.raw)
+        return self._json_wrapping(result=self.data)
 
     def get_instance_types(self,
                            max_cpu=None,
                            max_memory=None,
                            max_storage=None):
         """
-        Return all instance types.
+        Return instance types based on the provided filters.
 
         Returns:
             dict
         """
-        data = self.raw
+        result = self.data
         if max_cpu:
-            data = filter(lambda x: x.get('vCPU') <= int(max_cpu), data)
+            result = {k: v for k, v in result.iteritems()
+                      if v['vCPU'] <= int(max_cpu)}
         if max_memory:
-            data = filter(lambda x: x.get('memory') <= int(max_memory), data)
+            result = {k: v for k, v in result.iteritems()
+                      if v['memory'] <= int(max_memory)}
         if max_storage:
-            data = filter(
-                lambda x: x.get('storage') and x.get('storage').get('size') <= int(max_storage),
-                data)
+            result = {k: v for k, v in result.iteritems()
+                      if v['storage'] and k['storage']['size'] <= int(max_storage)}
 
-        instance_types = map(lambda x: x.get('instance_type'), data)
-
-        return self._json_wrapping(instance_types=instance_types)
+        return self._json_wrapping(result=result.keys())
 
     def get_instance_type(self, instance_type):
         """
@@ -107,11 +107,16 @@ class AWSInstances(object):
         Args:
             instance_type (str):        The instance type to get data for.
         """
-        instance_type = filter(
-            lambda x: x.get('instance_type') == instance_type,
-            self.raw)
 
-        return self._json_wrapping(instance_type=instance_type)
+        return self._json_wrapping(result=self.data.get(instance_type))
+
+    def get_pricing(self, region=None, instance_type_filter=None):
+        """
+        """
+        result = {k: v['pricing'] for k, v in self.data.iteritems()}
+
+        return self._json_wrapping(result=result)
+
 
     def _refresh_instances_json(self):
         """
@@ -122,9 +127,41 @@ class AWSInstances(object):
             logging.debug('Refreshing instances cache...')
             return
 
-        self._raw = requests.get(self.instances_json_url).json()
+        data = requests.get(self.instances_json_url).json()
+        self._raw_data = self._clean_data(data)
         self._expire_time = (
             datetime.now() + timedelta(hours=self.cache_max_age))
+
+    def _clean_data(self, data):
+        """
+        The data we're using has a boatload of information, and we
+            really only need a little, so I'm going to clean it up
+            a little bit. In a larger application, I'd use something
+            like Marshmellow to marshall my data, but for this small
+            usecase, I'm just going to prune the pricing data.
+
+        The data is pruned for the following criteria:
+            * We only really care about spot pricing, so we'll just
+                pull out pricing data entirely, since it's a massive
+                amount of data we don't need.
+
+        I'm also performing exlusively reads, so let's reformat the
+            data into a dict, so I can leverage lookups.
+
+        Args:
+            data (list):        The data to clean.
+
+        Returns:
+            list
+        """
+        data = {i.pop('instance_type'): i for i in data}
+
+        result = {}
+        for instance_type, attributes in data.iteritems():
+            del attributes['pricing']
+            result[instance_type] = attributes
+
+        return data
 
     def _json_wrapping(self, **kwargs):
         """
