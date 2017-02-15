@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Optimal AWS Cluster Sizer</title>
+
+  <!-- CSS Lib Imports -->
+  <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,700"/>
+  <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+  <link type="text/css" rel="stylesheet" href="lib/materialize-css/dist/css/materialize.min.css"/>
+  <link type="text/css" rel="stylesheet" href="static/assets/css/font-awesome.min.css">
+
+  <!-- CSS Imports -->
+  <link type="text/css" rel="stylesheet" href="static/assets/css/style.css"/>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+</head>
+<body ng-app="app">
+
+  <!-- Nav Header -->
+  <nav class="light-blue lighten-1" role="navigation">
+    <div class="nav-wrapper container">
+      <a href="/" class="brand-logo">
+      <i class="fa fa-server hide-on-med-and-down"></i>
+        Optimal AWS Cluster Sizer
+      </a>
+      <!-- NOTE:
+
+      When on the main page, if a cluster is "in progress",
+           present a "New Cluster" button.
+
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li>
+          <a ui-sref="requirements">
+            New Cluster
+          </a>
+        </li>
+      </ul>
+      -->
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- Controlled by UI-Router -->
+    <div ui-view="main"></div>
+
+  </div>
+
+  <!-- JS Lib Imports -->
+  <script type="text/javascript" src="lib/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="lib/angular/angular.js"></script>
+  <script type="text/javascript" src="lib/angular-resource/angular-resource.js"></script>
+  <script type="text/javascript" src="lib/materialize-css/dist/js/materialize.min.js"></script>
+  <script type="text/javascript" src="lib/angular-materialize/src/angular-materialize.min.js"></script>
+  <script type="text/javascript" src="lib/angular-ui-router/release/angular-ui-router.min.js"></script>
+
+  <!-- App Modules -->
+  <script type="text/javascript" src="static/app.js"></script>
+  <script type="text/javascript" src="static/app.core.js"></script>
+  <script type="text/javascript" src="static/app.routes.js"></script>
+
+  <!-- Controllers -->
+  <script type="text/javascript" src="static/controllers/main.controller.js"></script>
+  <script type="text/javascript" src="static/controllers/requirements.controller.js"></script>
+  <script type="text/javascript" src="static/controllers/results.controller.js"></script>
+
+  <!-- Services -->
+  <script type="text/javascript" src="static/services/awsInstances.service.js"></script>
+  <script type="text/javascript" src="static/services/computeCluster.service.js"></script>
+
+</body>
+</html>

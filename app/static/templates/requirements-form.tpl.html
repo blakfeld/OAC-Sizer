@@ -1,0 +1,38 @@
+<div ng-controller="RequirementsController as require">
+  <h4>Enter Cluster Requirements</h4>
+
+  <!-- Enter Cluster Details -->
+  <form ng-submit="require.submitRequirements()">
+    <div class="row">
+      <div class="input-field">
+        <input id="requiredCpu"
+               type="text"
+               ng-model="require.cluster.requiredCPU" />
+        <label for="requiredCpu">Required CPU Cores</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="input-field">
+        <input id="requiredMemory"
+               type="text"
+               ng-model="require.cluster.requiredMemory" />
+        <label for="requiredMemory">Required Memory in GB</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="input-field">
+        <input id="requiredStorage"
+               type="text"
+               ng-model="require.cluster.requiredStorage" />
+        <label for="requiredStorage">Required Storage in GB</label>
+      </div>
+    </div>
+    <button class="modal-action modal-close waves-effect waves-blue btn-flat"
+            type="submit">
+      Submit
+    </button>
+  </form>
+
+</div>
