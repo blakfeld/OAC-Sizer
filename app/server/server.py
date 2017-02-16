@@ -70,18 +70,18 @@ def get_instances():
 @app.get(API_PREFIX + '/instances/types')
 def get_instance_types():
     """
-    Get a list of all instance types.
+    Get a list of all instance types. Filterable by required CPU,
+        Memory, and Storage needs via query parameters.
 
     Returns:
         dict
     """
     logging.debug('Serving instance type data.')
-    print(bottle.request.query.requiredCpu)
 
     return instance_data.get_instance_types(
-        max_cpu=bottle.request.query.requiredCpu,
-        max_memory=bottle.request.query.requiredMemory,
-        max_storage=bottle.request.query.requiredStorage)
+        filter_max_cpu=bottle.request.query.requiredCpu,
+        filter_max_memory=bottle.request.query.requiredMemory,
+        filter_max_storage=bottle.request.query.requiredStorage)
 
 
 @app.get(API_PREFIX + '/instances/types/<instance_type>')
@@ -103,7 +103,36 @@ def get_specific_instance_type(instance_type):
 @app.get(API_PREFIX + '/prices')
 def get_instance_prices():
     """
+    Get pricing data for all instance types. Filterable by instance
+        type via query parameters. Instance type query parameter can
+        be a comma separated list.
+
+    Returns:
+        dict
     """
+    logging.debug('Serving instance price data.')
+
+    instance_types = bottle.request.query.instanceTypes or None
+    instance_types = instance_types.split(',') if instance_types else []
+
+    return instance_data.get_prices(filter_instance_types=instance_types)
+
+
+@app.get(API_PREFIX + '/prices/<instance_type>')
+def get_specific_instance_prices(instance_type):
+    """
+    Get pricing data for a specific instance type.
+
+    Args:
+        instance_type (str):    The instance type tog et pricing
+                                    data for.
+
+    Returns:
+        dict
+    """
+    logging.debug('Serving instance price data for type "%s"', instance_type)
+
+    return instance_data.get_price_instance_type(instance_type)
 
 
 ##

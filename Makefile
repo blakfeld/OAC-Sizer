@@ -25,6 +25,11 @@ clean-build:
 run:
 	venv/bin/python app/run.py
 
+
+.PHONY: run-production
+run-production:
+	venv/bin/python app/run.py --production
+
 .PHONY: isort
 isort:
 	sh -c "isort --recursive ."

@@ -25,10 +25,11 @@ Author: Corwin Brown <corwin@corwinbrown.com>
 """
 from __future__ import print_function, absolute_import
 
-import copy
 import logging
+from collections import defaultdict
 from datetime import datetime, timedelta
 
+import boto3
 import requests
 
 
@@ -52,6 +53,8 @@ class AWSInstances(object):
 
         self._expire_time = None  # Track when our cached data expires.
         self._raw_data = None
+
+        self.client = boto3.client('ec2')
 
         self._refresh_instances_json()
 
@@ -78,25 +81,26 @@ class AWSInstances(object):
         return self._json_wrapping(result=self.data)
 
     def get_instance_types(self,
-                           max_cpu=None,
-                           max_memory=None,
-                           max_storage=None):
+                           filter_max_cpu=None,
+                           filter_max_memory=None,
+                           filter_max_storage=None):
         """
-        Return instance types based on the provided filters.
+        Get all instance types. Filterable via CPU, Memory, and
+            Storage requirements.
 
         Returns:
             dict
         """
         result = self.data
-        if max_cpu:
+        if filter_max_cpu:
             result = {k: v for k, v in result.iteritems()
-                      if v['vCPU'] <= int(max_cpu)}
-        if max_memory:
+                      if v['vCPU'] <= int(filter_max_cpu)}
+        if filter_max_memory:
             result = {k: v for k, v in result.iteritems()
-                      if v['memory'] <= int(max_memory)}
-        if max_storage:
+                      if v['memory'] <= int(filter_max_memory)}
+        if filter_max_storage:
             result = {k: v for k, v in result.iteritems()
-                      if v['storage'] and k['storage']['size'] <= int(max_storage)}
+                      if v['storage'] and k['storage']['size'] <= int(filter_max_storage)}
 
         return self._json_wrapping(result=result.keys())
 
@@ -110,13 +114,80 @@ class AWSInstances(object):
 
         return self._json_wrapping(result=self.data.get(instance_type))
 
-    def get_pricing(self, region=None, instance_type_filter=None):
+    def get_prices(self, filter_instance_types=None):
         """
+        Get pricing information for all instances. Filterable via
+            instance type names.
+
+        Args:
+            filter_instance_types (list):   Instance type names to
+                                                filter on.
+
+        Returns:
+            dict
         """
-        result = {k: v['pricing'] for k, v in self.data.iteritems()}
+        result = self._get_pricing(instance_types=filter_instance_types)
 
         return self._json_wrapping(result=result)
 
+    def get_price_instance_type(self, instance_type):
+        """
+        Get pricing data for a single instance type.
+
+        Args:
+            instance_type (str):    Name of the instance type to
+                                        get pricing data for.
+
+        Returns:
+            dict
+        """
+        result = self._get_pricing(instance_types=[instance_type])
+
+        return self._json_wrapping(result=result)
+
+    def _get_pricing(self, instance_types=None):
+        """
+        Utility method to get pricing data via boto3. Really, this
+            should live somewhere else since it's not really related
+            to parsing our data file, but this will serve my
+            purposes.
+
+        ASSUMPTIONS:
+            The purpose of this app is to generate data about a
+                theoretical computer cluster in AWS. AWS only
+                supports EMR on Linux. So I'm filtering down
+                to only show Linux prices. In a traditonal project,
+                this is when I'd ask for clarification, but this
+                seems like a reasonable assumption. Also it allows
+                me to format the data in a way that makes my life a
+                little easier :)
+
+        Args:
+            instance_types (list):  List of instance types to filter
+                                        on.
+
+        Returns:
+            dict
+        """
+        instance_types = instance_types or []
+        raw_pricing_data = self.client.describe_spot_price_history(
+            InstanceTypes=instance_types,
+            ProductDescriptions=['Linux/UNIX'],
+            StartTime=datetime.now() - timedelta(seconds=1),
+            EndTime=datetime.now())
+
+        spot_pricing_data = defaultdict(dict)
+        for raw_price in raw_pricing_data.get('SpotPriceHistory', []):
+            instance_type = raw_price['InstanceType']
+            availability_zone = raw_price['AvailabilityZone']
+
+            # I should only encounter each Availability Zone once....
+            spot_pricing_data[instance_type][availability_zone] = {
+                'spotPrice': raw_price['SpotPrice'],
+                'timeStamp': raw_price['Timestamp'].strftime('%s')
+            }
+
+        return spot_pricing_data
 
     def _refresh_instances_json(self):
         """
