@@ -92,15 +92,15 @@ class AWSInstances(object):
             dict
         """
         result = self.data
-        if filter_max_cpu:
+        if filter_max_cpu and result:
             result = {k: v for k, v in result.iteritems()
                       if v['vCPU'] <= int(filter_max_cpu)}
-        if filter_max_memory:
+        if filter_max_memory and result:
             result = {k: v for k, v in result.iteritems()
                       if v['memory'] <= int(filter_max_memory)}
-        if filter_max_storage:
+        if filter_max_storage and result:
             result = {k: v for k, v in result.iteritems()
-                      if v['storage'] and k['storage']['size'] <= int(filter_max_storage)}
+                      if v['storage'] and v['storage']['size'] <= int(filter_max_storage)}
 
         return self._json_wrapping(result=result.keys())
 

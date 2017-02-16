@@ -24,19 +24,6 @@
       <i class="fa fa-server hide-on-med-and-down"></i>
         Optimal AWS Cluster Sizer
       </a>
-      <!-- NOTE:
-
-      When on the main page, if a cluster is "in progress",
-           present a "New Cluster" button.
-
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li>
-          <a ui-sref="requirements">
-            New Cluster
-          </a>
-        </li>
-      </ul>
-      -->
     </div>
   </nav>
 
@@ -57,7 +44,6 @@
 
   <!-- App Modules -->
   <script type="text/javascript" src="static/app.js"></script>
-  <script type="text/javascript" src="static/app.core.js"></script>
   <script type="text/javascript" src="static/app.routes.js"></script>
 
   <!-- Controllers -->
@@ -66,7 +52,8 @@
   <script type="text/javascript" src="static/controllers/results.controller.js"></script>
 
   <!-- Services -->
-  <script type="text/javascript" src="static/services/awsInstances.service.js"></script>
+  <script type="text/javascript" src="static/services/awsInstanceTypes.service.js"></script>
+  <script type="text/javascript" src="static/services/awsSpotPrices.service.js"></script>
   <script type="text/javascript" src="static/services/computeCluster.service.js"></script>
 
 </body>

@@ -3,47 +3,103 @@
  *    Service for construcing Compute Cluster objects.
  *
  *  Author: Corwin Brown <corwin@corwinbrown.com>
- **/
+ */
 
 'use strict';
 
-angular.module('app.core')
-  .factory('ComputeClusterService', function (AWSInstanceService, $q) {
-    var computeCluster = {
-      'requiredCpu': null,
-      'requiredMemory': null,
-      'requiredStorage': null,
-      'instanceTypes': [],
-      'isLoading': false,
-      'getInstanceTypes': function () {
-        var defer = $q.defer();
-        var params = {
-          max_cpu: this.requiredCpu,
-          max_memory: this.requiredMemory,
-          max_storage: this.requiredStorage,
-        };
-        computeCluster.isLoading = true;
-        AWSInstanceService.query(params, function (data) {
-          computeCluster.instanceTypes = data.instance_types;
+angular.module('app')
+  .factory('ComputeClusterService', ComputeClusterService);
 
-          computeCluster.isLoading = false;
-          defer.resolve();
-        });
+ComputeClusterService.$inject = [
+  'AWSInstanceTypeService',
+  'AWSSpotPriceService',
+  '$q',
+];
 
-        return defer.promise;
-      },
-      'getInstanceType': function(instanceType) {
-        var defer = $q.defer();
-        AWSInstanceService.get({instanceType: instanceType}, function(data) {
-          console.log(data)
-        });
+function ComputeClusterService(AWSInstanceTypeService, AWSSpotPriceService, $q) {
+  var service = {
+    'instanceTypes': [],
+    'spotPrices': [],
+    'selectedInstanceType': null,
+    'getInstanceTypes': getInstanceTypes,
+    'getInstanceType': getInstanceType,
+    'getSpotPrices': getSpotPrices,
+  };
 
-        defer.resolve;
+  return service;
 
-        return defer.promise;
-      }
-
+  /**
+   *  Fetch an array of Instance Types (filtered by the provided
+   *    parameters) from the backend.
+   *
+   *  @param {int} requiredCpu      - The number of CPU cores to
+   *                                    filter on.
+   *  @param {int} requiredMemory   - The amount of RAM (in GBs)
+   *                                     to filter on.
+   *  @param {int} requiredStorage  - The amount of Storage (in GBs)
+   *                                      to filter on.
+   *
+   *  @return {promise}
+   */
+  function getInstanceTypes(requiredCpu, requiredMemory, requiredStorage) {
+    var defered = $q.defer();
+    var params = {
+      requiredCpu: requiredCpu,
+      requiredMemory: requiredMemory,
+      requiredStorage: requiredStorage,
     };
 
-    return computeCluster;
-  });
+    AWSInstanceTypeService.query(params, function (data) {
+      service.instanceTypes = data.result;
+      defered.resolve();
+    });
+
+    return defered.promise;
+  }
+
+  /**
+   *  Fetch the complete details of a specific instance type from the
+   *      backend.
+   *
+   *  @param {stirng} instanceType  - The name of the instance type
+   *                                    to return.
+   *
+   *  @return {promise}
+   */
+  function getInstanceType (instanceType) {
+    var defered = $q.defer();
+    var params = {
+      instanceType: instanceType,
+    };
+
+    AWSInstanceTypeService.get(params, function(data) {
+      service.selectedInstanceType = data.result;
+      defered.resolve();
+    });
+
+    return defered.promise;
+  }
+
+  /**
+   *  Fetch spot prices from the backend, filtered by the provided
+   *    instance types.
+   *
+   *  @param {array} instanceType   - An arary of instance names to
+   *                                    filter on.
+   *
+   *  @return {promise}
+   */
+  function getSpotPrices(instanceTypes) {
+    var defered = $q.defer();
+    var params = {
+      instanceTypes: instanceTypes.join(','),
+    };
+
+    AWSSpotPriceService.query(params, function(data) {
+      service.spotPrices = data.result;
+      defered.resolve();
+    });
+
+    return defered.promise;
+  }
+}

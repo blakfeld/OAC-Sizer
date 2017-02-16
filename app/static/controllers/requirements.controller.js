@@ -3,25 +3,27 @@
  *    Controller logic for the Cluster Sizer Requirements page.
  *
  *  Author: Corwin Brown <corwin@corwinbrown.com>
- **/
+ */
 
 'use strict';
 
-angular.module('app.core')
-  .controller('RequirementsController', function($state, $stateParams, ComputeClusterService) {
-    var vm = this;
-    vm.cluster = ComputeClusterService;
+angular.module('app')
+  .controller('RequirementsController', RequirementsController);
 
-    // Initialize parameters provided via Query String.
-    vm.cluster.requiredCpu = $stateParams.requiredCpu;
-    vm.cluster.requiredMemory = $stateParams.requiredMemory;
-    vm.cluster.requiredStorage = $stateParams.requiredStorage;
+RequirementsController.$inject = [
+  '$state',
+];
 
-    vm.submitRequirements = function () {
-      $state.go('results', {
-        requiredCpu: vm.cluster.requiredCpu,
-        requiredMemory: vm.cluster.requiredMemory,
-        requiredStorage: vm.cluster.requiredStorage,
-      });
-    };
-  });
+function RequirementsController($state) {
+  var vm = this;
+
+  vm.formData = {};
+
+  vm.submitRequirements = function () {
+    $state.go('results', {
+      requiredCpu: vm.formData.requiredCpu,
+      requiredMemory: vm.formData.cluster.requiredMemory,
+      requiredStorage: vm.formData.requiredStorage,
+    });
+  };
+}

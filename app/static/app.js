@@ -4,13 +4,13 @@
  *    app.
  *
  *  Author: Corwin Brown <corwin@corwinbrown.com>
- **/
+ */
 
 'use strict';
 
 angular.module('app', [
+  'ngResource',
   'ui.materialize',
   'ui.router',
   'app.routes',
-  'app.core',
 ]);
