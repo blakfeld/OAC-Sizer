@@ -6,7 +6,7 @@ Usage:
     run.py [options]
 
 Options:
-    --host=HOST      Set listen address [default: 127.0.0.1].
+    --host=HOST      Set listen address [default: 0.0.0.0].
     --port=PORT      Port number to run the app on [default: 9001].
     --production     Toggle running with a production Cherrpy server.
 
@@ -28,8 +28,8 @@ def main():
     """
     args = docopt(__doc__)
 
-    host = args.get('--host', '127.0.0.1')
-    port = int(os.environ.get('PORT', args.get('--port', 9001)))
+    host = args['--host']
+    port = int(os.environ.get('PORT', args['--port']))
     production = args.get('--production', False)
 
     # Use the reloader if we're not in production mode
