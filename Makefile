@@ -40,19 +40,13 @@ run-production:
 	venv/bin/python app/run.py --production
 
 
-.PHONY: isort
-isort:
-	sh -c "isort --recursive ."
-
-
-.PHONY: lint
-lint:
-	flake8
-
-
 .PHONY: clean
 clean:
 	@find ./ -name "*.pyc" -exec rm -f {} \;
 	@find ./ -name "*.pyo" -exec rm -f {} \;
 	@find ./ -name "*~" -exec rm -f {} \;
 	@find ./ -name "__pycache__" -exec rm -f {} \;
+
+
+.PHONY: heroku
+heroku: build-libs run-production
