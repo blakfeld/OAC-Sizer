@@ -71,14 +71,19 @@ class AWSInstances(object):
 
         return self._raw_data
 
-    def get_instances(self):
+    def get_instances(self, filter_instance_types=None):
         """
         Return all our instance data.
 
         Returns:
             dict
         """
-        return self._json_wrapping(result=self.data)
+        result = self.data
+        if filter_instance_types:
+            result = {k: v for k, v in result.iteritems()
+                      if k in filter_instance_types}
+
+        return self._json_wrapping(result=result)
 
     def get_instance_types(self,
                            filter_max_cpu=None,
@@ -248,7 +253,7 @@ class AWSInstances(object):
         """
         wrapping = {
             'expire_time': self._expire_time.strftime('%s'),
-            'fetched_from': self.instances_json_url,
+            'data_source': self.instances_json_url,
         }
         wrapping.update(kwargs)
 

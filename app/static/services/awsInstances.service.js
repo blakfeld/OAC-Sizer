@@ -7,7 +7,21 @@
 'use strict';
 
 angular.module('app')
-  .factory('AWSInstanceTypeService', AWSInstanceTypeService);
+  .factory('AWSInstanceTypeService', AWSInstanceTypeService)
+  .factory('AWSInstancesService', AWSInstancesService);
+
+AWSInstancesService.$inject = [
+  '$location',
+  '$resource',
+]
+
+function AWSInstancesService($location, $resource) {
+  var url = $location.protocol() + '://' +
+            $location.host() + ':' + $location.port() +
+            '/api/v1.0/instances';
+
+  return $resource(url, {}, {query: {isArray: false}});
+}
 
 AWSInstanceTypeService.$inject = [
   '$location',
@@ -21,3 +35,4 @@ function AWSInstanceTypeService($location, $resource) {
 
   return $resource(url, {instanceType: '@instanceType'}, {query: {isArray: false}});
 }
+

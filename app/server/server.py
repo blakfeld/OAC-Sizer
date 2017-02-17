@@ -64,7 +64,10 @@ def get_instances():
     """
     logging.debug('Serving instance data.')
 
-    return instance_data.get_instances()
+    instance_types = bottle.request.query.instanceTypes or None
+    instance_types = instance_types.split(',') if instance_types else []
+
+    return instance_data.get_instances(filter_instance_types=instance_types)
 
 
 @app.get(API_PREFIX + '/instances/types')

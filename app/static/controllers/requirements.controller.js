@@ -22,7 +22,7 @@ function RequirementsController($state) {
   vm.submitRequirements = function () {
     $state.go('results', {
       requiredCpu: vm.formData.requiredCpu,
-      requiredMemory: vm.formData.cluster.requiredMemory,
+      requiredMemory: vm.formData.requiredMemory,
       requiredStorage: vm.formData.requiredStorage,
     });
   };

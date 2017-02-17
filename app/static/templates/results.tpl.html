@@ -1,7 +1,38 @@
 <ng-include src="'static/templates/center-spinner.tpl.html'"
-            ng-show="results.cluster.isLoading"></ng-include>
+            ng-show="results.isLoading"></ng-include>
 
-<div class="section" ng-hide="results.cluster.isLoading">
+<div class="section" ng-hide="results.isLoading">
+
+  <div class="row">
+    <div class="col s12">
+
+      <ul tabs>
+        <li class="tab s6 m5 l8">
+          <a class="active" href="#cheapestConfig">Cheapest</a>
+        </li>
+        <li class="tab s6">
+          <a href="#fewestInstances">Fewest Instances</a>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+
+  <!-- Cheapest Config Tab -->
+  <div id="cheapestConfig" class="row">
+    <div class="col s12">
+      <display-instance instance="results.cluster.resultCheapestInstance"></display-instance>
+    </div>
+  </div>
+
+  <!-- Fewest Instances Tab -->
+  <div id="fewestInstances" class="row">
+    <div class="col s12">
+      <display-instance instance="results.cluster.resultMinInstances"></display-instance>
+    </div>
+  </div>
+
+  <!-- New Cluster Button -->
   <div class="fixed-action-btn">
     <a class="btn-floating red lighten-1"
        tooltipped
@@ -11,6 +42,7 @@
       <i class="material-icons">add</i>
     </a>
   </div>
+
 </div>
 
 <div id="requirementsModal" class="modal">
