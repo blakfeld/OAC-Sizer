@@ -22,9 +22,12 @@
     <div class="col s12">
 
       <div class="hide-on-small-and-down">
-        <strong>Requirements:</strong> {{ results.cluster.requiredCpu }} CPUs
-        <strong>Memory:</strong> {{ results.cluster.requiredMemory }} GB RAM
-        <strong>Storage:</strong> {{ results.cluster.requiredStorage }} GB Storage
+        <strong>Requirements:</strong>
+        <ul class="requirements-list">
+          <li><strong>CPU:</strong> {{ results.cluster.requiredCpu }} CPUs</li>
+          <li><strong>Memory:</strong> {{ results.cluster.requiredMemory }} GB RAM</li>
+          <li><strong>Storage:</strong> {{ results.cluster.requiredStorage }} GB Storage</li>
+        </ul>
       </div>
 
     </div>

@@ -6,3 +6,12 @@
   bottom: 0;
   margin: auto;
 }
+
+.requirements-list ul{
+  list-style: none;
+}
+
+.requirements-list li {
+  padding-right: 30px;
+  display: inline;
+}
