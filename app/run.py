@@ -14,6 +14,7 @@ Author: Corwin Brown <corwin@corwinbrown.com>
 """
 from __future__ import print_function, absolute_import
 
+import os
 import sys
 
 from docopt import docopt
@@ -28,7 +29,7 @@ def main():
     args = docopt(__doc__)
 
     host = args.get('--host', '127.0.0.1')
-    port = int(args.get('--port', 9001))
+    port = int(os.environ.get('PORT', args.get('--port', 9001)))
     production = args.get('--production', False)
 
     # Use the reloader if we're not in production mode
