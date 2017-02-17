@@ -1,1 +1,43 @@
-<h4>{{ instance.name }}</h4>
+<div class="row">
+  <div class="col s12">
+
+    <h5>{{ instance.pretty_name }}</h5>
+
+    <table class="bordered">
+      <tbody>
+        <tr>
+          <td><strong>Name</strong></td>
+          <td>{{ instance.name }}</td>
+        </tr>
+        <tr>
+          <td><strong>Instances Required</strong></td>
+          <td>{{ instance.count }}</td>
+        </tr>
+        <tr>
+          <td><strong>Individual Price</strong></td>
+          <td>${{ instance.price }}</td>
+        </tr>
+        <tr>
+          <td><strong>Total Price</strong></td>
+          <td>${{ instance.totalPrice }}</td>
+        </tr>
+        <tr>
+          <td><strong>vCPU Count</strong></td>
+          <td>{{ instance.vCPU }} </td>
+        </tr>
+        <tr>
+          <td><strong>Memory</strong></td>
+          <td>{{ instance.memory }} GB</td>
+        </tr>
+        <tr>
+          <td><strong>Storage</strong></td>
+          <td>{{ instance.storage.size }} GB</td>
+        </tr>
+        <tr>
+          <td><strong>Network Performance</strong></td>
+          <td>{{ instance.network_performance }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

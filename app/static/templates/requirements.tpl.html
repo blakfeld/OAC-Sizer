@@ -1,0 +1,53 @@
+<div class="row">
+  <div class="col s12">
+
+    <h2>Enter Cluster Requirements</h2>
+
+  </div>
+</div>
+<div class="row">
+  <div class="col s12">
+
+    <!-- Enter Cluster Details -->
+    <form name="requirementsForm" ng-submit="require.submitRequirements()">
+      <div class="row">
+        <div class="input-field">
+          <input id="requiredCpu"
+                 type="number"
+                 min="1"
+                 ng-model="require.formData.requiredCpu"
+                 required />
+          <label for="requiredCpu">Required CPU Cores</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="input-field">
+          <input id="requiredMemory"
+                 type="number"
+                 min="1"
+                 ng-model="require.formData.requiredMemory"
+                 required />
+          <label for="requiredMemory">Required Memory in GB</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="input-field">
+          <input id="requiredStorage"
+                 type="number"
+                 min="0"
+                 ng-model="require.formData.requiredStorage"
+                 required />
+          <label for="requiredStorage">Required Storage in GB</label>
+        </div>
+      </div>
+      <button class="modal-action modal-close waves-effect waves-blue btn-flat"
+              type="submit"
+              ng-disabled="requirementsForm.$invalid">
+        Submit
+      </button>
+    </form>
+
+  </div>
+</div>

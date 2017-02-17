@@ -18,35 +18,48 @@
     </div>
   </div>
 
+  <div class="row">
+    <div class="col s12">
+
+      <div class="hide-on-small-and-down">
+        <strong>Requirements:</strong> {{ results.cluster.requiredCpu }} CPUs
+        <strong>Memory:</strong> {{ results.cluster.requiredMemory }} GB RAM
+        <strong>Storage:</strong> {{ results.cluster.requiredStorage }} GB Storage
+      </div>
+
+    </div>
+  </div>
+
+
   <!-- Cheapest Config Tab -->
   <div id="cheapestConfig" class="row">
     <div class="col s12">
-      <display-instance instance="results.cluster.resultCheapestInstance"></display-instance>
+      <display-instance instance="results.cluster.resultCheapestInstance"
+                        cluster="results.cluster">
+      </display-instance>
     </div>
   </div>
 
   <!-- Fewest Instances Tab -->
   <div id="fewestInstances" class="row">
     <div class="col s12">
-      <display-instance instance="results.cluster.resultMinInstances"></display-instance>
+      <display-instance instance="results.cluster.resultMinInstances"
+                        cluster="results.cluster">
+      </display-instance>
     </div>
   </div>
 
   <!-- New Cluster Button -->
   <div class="fixed-action-btn">
-    <a class="btn-floating red lighten-1"
+    <a ui-sref="requirements"
+       class="btn-floating red lighten-1"
        tooltipped
        data-position="left"
        data-delay="50"
-       data-tooltip="Create New Cluster">
+       data-tooltip="Create New Cluster"
+       modal>
       <i class="material-icons">add</i>
     </a>
   </div>
 
-</div>
-
-<div id="requirementsModal" class="modal">
-  <div class="modal-content center-align">
-    <ng-include src="'static/templates/requirements-form.tpl.html'"></ng-include>
-  </div>
 </div>

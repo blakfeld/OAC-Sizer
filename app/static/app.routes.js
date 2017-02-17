@@ -27,7 +27,7 @@ function RouteConfig ($stateProvider, $urlRouterProvider) {
       }
     })
     .state('requirements', {
-      url: '/requirements?requiredCpu&requiredMemory&requiredStorage',
+      url: '/requirements',
       views: {
         main: {
           templateUrl: 'static/templates/requirements.tpl.html',

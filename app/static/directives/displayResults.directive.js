@@ -6,7 +6,8 @@ function displayInstance() {
     restrict: 'AE',
     templateUrl: 'static/templates/display-instance.tpl.html',
     scope: {
-      instance: '='
+      instance: '=',
+      cluster: '=',
     }
   };
 }
