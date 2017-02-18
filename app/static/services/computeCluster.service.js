@@ -52,7 +52,6 @@ function ComputeClusterService($q,
   function getOptimalCluster() {
     var defered = $q.defer();
 
-    //  Sory about
     service.getInstanceTypes()
       .then(function () {
         return service.getSpotPrices();
