@@ -13,7 +13,7 @@ angular.module('app')
 AWSInstancesService.$inject = [
   '$location',
   '$resource',
-]
+];
 
 function AWSInstancesService($location, $resource) {
   var url = $location.protocol() + '://' +

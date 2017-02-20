@@ -28,21 +28,13 @@ def main():
     """
     args = docopt(__doc__)
 
-    host = args['--host']
-    port = int(os.environ.get('PORT', args['--port']))
-    production = args.get('--production', False)
-
-    # Use the reloader if we're not in production mode
-    if production:
-        server = 'paste'
-        reloader = False
-        log_level = 'error'
-        debug = False
-    else:
-        server = 'wsgiref'
-        reloader = True
-        log_level = 'debug'
-        debug = True
+    production  = args.get('--production', False)
+    host        = args['--host']
+    port        = int(os.environ.get('PORT', args['--port']))
+    server      = 'paste' if production else 'wsgiref'
+    log_level   = 'error' if production else 'debug'
+    reloader    = (not production)
+    debug       = (not production)
 
     serve(host=host,
           port=int(port),

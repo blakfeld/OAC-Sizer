@@ -30,7 +30,13 @@ def get_parent_abspath(fpath=None):
 
 def no_cache(enabled=True):
     """
+    Set Caching headers. Useful for development.
 
+    Args:
+        enabled (bool):     Toggle setting Cache-Control headers.
+
+    Returns:
+        func
     """
     def no_cache_decorator(func):
         def wrapper(*args, **kwargs):

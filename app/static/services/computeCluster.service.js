@@ -52,7 +52,6 @@ function ComputeClusterService($q,
   function getOptimalCluster() {
     var defered = $q.defer();
 
-    //  Sory about
     service.getInstanceTypes()
       .then(function () {
         return service.getSpotPrices();
@@ -144,7 +143,7 @@ function ComputeClusterService($q,
    *
    *  @return {promise}
    */
-  function getSpotPrices(instanceTypes) {
+  function getSpotPrices() {
     var defered = $q.defer();
     var params = {
       instanceTypes: service.instanceTypes.join(','),
@@ -171,7 +170,7 @@ function ComputeClusterService($q,
    *                      cheapest spot prices.
    */
   function findCheapestAvailabilityZone() {
-    service.cheapestSpotPrices = []
+    service.cheapestSpotPrices = [];
     angular.forEach(service.spotPrices, function (spotPrices, instanceType) {
       var cheapest = {
         name: instanceType,
@@ -245,7 +244,7 @@ function ComputeClusterService($q,
       }
 
       if (service.resultCheapestInstance.totalPrice > instance.totalPrice) {
-        service.resultCheapestInstance = instance
+        service.resultCheapestInstance = instance;
       }
 
       if (service.resultMinInstances.totalPrice > instance.totalPrice) {
@@ -266,6 +265,6 @@ function ComputeClusterService($q,
    *  @returns {integer}
    */
   function divideAndRoundUp(a, b) {
-    return a % b == 0 ? parseInt(a / b) : parseInt((a / b) + 1);
-  };
+    return a % b === 0 ? parseInt(a / b) : parseInt((a / b) + 1);
+  }
 }

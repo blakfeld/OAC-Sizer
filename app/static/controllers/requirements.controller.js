@@ -21,9 +21,9 @@ function RequirementsController($state) {
 
   vm.submitRequirements = function () {
     $state.go('results', {
-      requiredCpu: vm.formData.requiredCpu,
-      requiredMemory: vm.formData.requiredMemory,
-      requiredStorage: vm.formData.requiredStorage,
+      requiredCpu:      vm.formData.requiredCpu,
+      requiredMemory:   vm.formData.requiredMemory,
+      requiredStorage:  vm.formData.requiredStorage,
     });
   };
 }

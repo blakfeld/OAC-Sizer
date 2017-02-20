@@ -1,5 +1,6 @@
 """
 server.py:
+    Serve our application endpoints.
 
 Author: Corwin Brown <corwin@corwinbrown.com>
 """
@@ -139,7 +140,7 @@ def get_specific_instance_prices(instance_type):
 
 
 ##
-# Static resource routes.
+# Static Resource Routes.
 ##
 
 
@@ -164,7 +165,7 @@ def get_static(filename):
 @no_cache(DEBUG_MODE)
 def get_lib(filename):
     """
-    Server library files downloaded via "npm".o
+    Server library files downloaded via "npm".
 
     Args:
         filename (str):     The file to retrieve.
