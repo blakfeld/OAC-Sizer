@@ -89,6 +89,7 @@ ENV/
 
 # Rope project settings
 .ropeproject# Logs
+.ropeproject/
 logs
 *.log
 npm-debug.log*
